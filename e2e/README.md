@@ -110,3 +110,7 @@ E2E_CONTRACT_ID=<deployed contract id> npm run test:e2e
 
 If you need the suite to drive a different account (e.g. one you've already
 funded), override the secret: `E2E_WALLET_SECRET=S... npm run test:e2e`.
+
+## Landing page smoke test
+
+`landing-page.spec.ts` is a no-auth smoke test that verifies the landing page loads, the brand link and navigation links are visible, and the Scout Dashboard route is reachable. It runs against the dev server without any wallet setup.
