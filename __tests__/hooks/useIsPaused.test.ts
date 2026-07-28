@@ -114,4 +114,27 @@ describe('useIsPaused', () => {
     // isPaused now reflects the resolved value from getContractPaused
     expect(isPausedResult.current).toBe(true);
   });
+
+  // 6 ─ Cache invalidation ─────────────────────────────────────────────────────
+  // Re-render with updated mock simulates cache invalidation
+  it('reflects updated contract state when hook re-renders with new mock value', async () => {
+    // First render: contract is not paused
+    mockGetContractHealth.mockResolvedValue({});
+    mockGetContractPaused.mockResolvedValue(false);
+
+    const { result, rerender } = renderHook(() => useIsPaused());
+    await flush();
+    expect(result.current).toBe(false);
+
+    // Update mock to simulate contract being paused (cache invalidated)
+    mockGetContractHealth.mockResolvedValue({});
+    mockGetContractPaused.mockResolvedValue(true);
+
+    // Re-render the hook
+    rerender();
+    await flush();
+
+    // Hook reflects the new paused state
+    expect(result.current).toBe(true);
+  });
 });
